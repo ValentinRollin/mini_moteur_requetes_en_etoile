@@ -5,6 +5,7 @@ import fr.boreal.model.logicalElements.factory.impl.SameObjectTermFactory;
 import fr.boreal.model.logicalElements.impl.SubstitutionImpl;
 import org.apache.commons.lang3.NotImplementedException;
 import qengine.model.RDFAtom;
+import qengine.model.StarQuery;
 import qengine.storage.RDFHexaStore;
 import org.junit.jupiter.api.Test;
 
@@ -66,10 +67,7 @@ public class RDFHexaStoreTest {
         throw new NotImplementedException();
     }
 
-    @Test
-    public void testSize() {
-        throw new NotImplementedException();
-    }
+
     
     @Test
     public void testMatchAtom() {
@@ -98,10 +96,6 @@ public class RDFHexaStoreTest {
     }
 
 
-    @Test
-    public void testMatchStarQuery() {
-        throw new NotImplementedException();
-    }
 
    
     // Vos autres tests d'HexaStore ici
@@ -215,4 +209,75 @@ public class RDFHexaStoreTest {
 
         assertFalse(results.hasNext(), "Aucune correspondance ne devrait être trouvée pour la requête.");
     }
+    
+    @Test
+    public void testMatchSimpleStarQuery() {
+        RDFHexaStore store = new RDFHexaStore();
+
+        // Ajouter des triplets RDF
+        store.add(new RDFAtom(SUBJECT_1, PREDICATE_1, OBJECT_1));
+        store.add(new RDFAtom(SUBJECT_1, PREDICATE_2, OBJECT_2));
+
+        // Construire une requête en étoile avec deux atomes
+        RDFAtom atom1 = new RDFAtom(SUBJECT_1, PREDICATE_1, OBJECT_1);
+        RDFAtom atom2 = new RDFAtom(SUBJECT_1, PREDICATE_2, OBJECT_2);
+        StarQuery query = new StarQuery("SimpleQuery", List.of(atom1, atom2), List.of());
+
+        // Évaluer la requête
+        Iterator<Substitution> results = store.match(query);
+
+        // Vérifier qu'il y a des correspondances
+        assertTrue(results.hasNext(), "Il devrait y avoir des correspondances pour la requête.");
+        assertEquals(1, store.size(), "La taille du store reste constante.");
+    }
+    @Test
+    public void testMatchStarQueryWithVariables() {
+        RDFHexaStore store = new RDFHexaStore();
+
+        // Ajouter des triplets RDF
+        store.add(new RDFAtom(SUBJECT_1, PREDICATE_1, OBJECT_1));
+        store.add(new RDFAtom(SUBJECT_1, PREDICATE_1, OBJECT_2));
+
+        // Construire une requête en étoile avec une variable
+        RDFAtom atom = new RDFAtom(SUBJECT_1, PREDICATE_1, VAR_X);
+        StarQuery query = new StarQuery("VariableQuery", List.of(atom), List.of(VAR_X));
+
+        // Évaluer la requête
+        Iterator<Substitution> results = store.match(query);
+        List<Substitution> matchedResults = new ArrayList<>();
+        results.forEachRemaining(matchedResults::add);
+
+        // Vérifications
+        assertEquals(2, matchedResults.size(), "Deux correspondances devraient être trouvées.");
+        assertTrue(matchedResults.stream().anyMatch(s -> s.toMap().get(VAR_X).equals(OBJECT_1)),
+                "La première correspondance devrait lier VAR_X à OBJECT_1.");
+        assertTrue(matchedResults.stream().anyMatch(s -> s.toMap().get(VAR_X).equals(OBJECT_2)),
+                "La deuxième correspondance devrait lier VAR_X à OBJECT_2.");
+    }
+    @Test
+    public void testMatchComplexStarQuery() {
+        RDFHexaStore store = new RDFHexaStore();
+
+        // Ajouter des triplets RDF
+        store.add(new RDFAtom(SUBJECT_1, PREDICATE_1, OBJECT_1));
+        store.add(new RDFAtom(OBJECT_1, PREDICATE_2, OBJECT_2));
+        store.add(new RDFAtom(OBJECT_2, PREDICATE_1, SUBJECT_2));
+
+        // Construire une requête en étoile reliant plusieurs triplets
+        RDFAtom atom1 = new RDFAtom(SUBJECT_1, PREDICATE_1, VAR_X);
+        RDFAtom atom2 = new RDFAtom(VAR_X, PREDICATE_2, VAR_Y);
+        StarQuery query = new StarQuery("ComplexQuery", List.of(atom1, atom2), List.of(VAR_Y));
+
+        // Évaluer la requête
+        Iterator<Substitution> results = store.match(query);
+        List<Substitution> matchedResults = new ArrayList<>();
+        results.forEachRemaining(matchedResults::add);
+
+        // Vérifications
+        assertEquals(1, matchedResults.size(), "Une seule correspondance devrait être trouvée.");
+        Substitution substitution = matchedResults.get(0);
+        assertEquals(OBJECT_1, substitution.toMap().get(VAR_X), "VAR_X devrait être lié à OBJECT_1.");
+        assertEquals(OBJECT_2, substitution.toMap().get(VAR_Y), "VAR_Y devrait être lié à OBJECT_2.");
+    }
+
 }

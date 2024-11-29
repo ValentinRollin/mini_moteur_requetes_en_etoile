@@ -47,14 +47,14 @@ public final class Example {
 		for (RDFAtom atom : rdfAtoms) {
 			factBase.add(atom);  // Stocker chaque RDFAtom dans le store
 		}
-/*
+
 		// Exécuter les requêtes sur le store
 		for (StarQuery starQuery : starQueries) {
 			executeStarQuery(starQuery, factBase);
-			System.out.println("JONATHAN EST UN CHIEN" + store.match(starQuery));
+			System.out.println("Le ciel est bleu" + store.match(starQuery));
 			
 		}
-*/
+
 	}
 
 	/**
