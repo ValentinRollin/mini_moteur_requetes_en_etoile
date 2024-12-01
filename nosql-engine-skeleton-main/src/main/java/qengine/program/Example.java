@@ -16,7 +16,6 @@ import qengine.parser.RDFAtomParser;
 import qengine.parser.StarQuerySparQLParser;
 import qengine.storage.RDFHexaStore;
 
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

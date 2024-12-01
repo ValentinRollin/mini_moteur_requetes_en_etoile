@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import fr.boreal.model.logicalElements.api.Substitution;
 import qengine.model.StarQuery;
 import qengine.model.RDFAtom;
-import qengine.storage.RDFHexaStore;
 
 import java.io.IOException;
 import java.nio.file.Files;
