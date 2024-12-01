@@ -12,11 +12,11 @@ public class TestVerif {
             Verification verification = new Verification();
 
             // Charger les données RDF dans HexaStore et Integraal
-            System.out.println("Chargement des données RDF depuis data/sample_data.nt...");
+            System.out.println("Chargement des données RDF depuis data/sample_data.nt:");
             verification.loadData("data/100K.nt");
 
             // Évaluer et comparer les résultats des requêtes
-            System.out.println("Évaluation et comparaison des requêtes depuis data/sample_query.queryset...");
+            System.out.println("Évaluation et comparaison des requêtes depuis data/sample_query.queryset:");
             verification.evaluateAndCompareAll("data/STAR_ALL_workload.queryset");
 
             System.out.println("=== Vérification terminée ===");

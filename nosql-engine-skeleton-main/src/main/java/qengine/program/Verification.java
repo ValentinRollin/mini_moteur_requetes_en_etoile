@@ -51,7 +51,7 @@ public class Verification {
 
         for (StarQuery query : queries) {
             boolean isCorrect = verify(query);
-            System.out.printf("Query: %s%nCorrect: %s%n", query, isCorrect ? "YES" : "NO");
+            System.out.printf("Query: %s%nCorrect: %s%n", query, isCorrect ? "OUI" : "NON");
         }
     }
 
