@@ -32,9 +32,8 @@ public class Verification {
         this.integraalStore = new SimpleInMemoryGraphStore();
     }
 
-    /**
-     * Charge les données RDF dans HexaStore et Integraal.
-     */
+    //Charge les données RDF dans HexaStore et Integraal.
+     
     public void loadData(String rdfFilePath) throws IOException {
         List<RDFAtom> rdfAtoms = parseRDFData(rdfFilePath);
 
@@ -45,9 +44,8 @@ public class Verification {
         rdfAtoms.forEach(integraalStore::add);
     }
 
-    /**
-     * Évalue et compare un ensemble de requêtes depuis un fichier.
-     */
+    //Évalue et compare un ensemble de requêtes depuis un fichier.
+     
     public void evaluateAndCompareAll(String queryFilePath) throws IOException {
         List<StarQuery> queries = parseSparQLQueries(queryFilePath);
 
@@ -57,9 +55,8 @@ public class Verification {
         }
     }
 
-    /**
-     * Vérifie une requête donnée entre HexaStore et Integraal.
-     */
+    //Vérifie une requête donnée entre HexaStore et Integraal.
+     
     public boolean verify(StarQuery query) {
         List<Substitution> hexastoreResults = evaluateHexaStore(query);
         List<Substitution> integraalResults = evaluateIntegraal(query);
@@ -67,9 +64,6 @@ public class Verification {
         return compareResults(hexastoreResults, integraalResults);
     }
 
-    /**
-     * Évalue une requête sur HexaStore.
-     */
     List<Substitution> evaluateHexaStore(StarQuery query) {
         Iterator<Substitution> iterator = hexastore.match(query);
         List<Substitution> results = new ArrayList<>();
@@ -77,9 +71,6 @@ public class Verification {
         return results;
     }
 
-    /**
-     * Évalue une requête sur Integraal.
-     */
     List<Substitution> evaluateIntegraal(StarQuery query) {
         FOQuery<FOFormulaConjunction> foQuery = query.asFOQuery();
         FOQueryEvaluator<FOFormula> evaluator = GenericFOQueryEvaluator.defaultInstance();
@@ -90,9 +81,7 @@ public class Verification {
         return results;
     }
 
-    /**
-     * Compare les résultats d'HexaStore et d'Integraal.
-     */
+
     boolean compareResults(List<Substitution> hexastoreResults, List<Substitution> integraalResults) {
         Set<String> hexastoreSet = hexastoreResults.stream()
                 .map(Substitution::toString)
@@ -104,9 +93,7 @@ public class Verification {
         return integraalSet.containsAll(hexastoreSet) && hexastoreSet.containsAll(integraalSet);
     }
 
-    /**
-     * Parse un fichier RDF pour extraire des RDFAtoms.
-     */
+
     static List<RDFAtom> parseRDFData(String rdfFilePath) throws IOException {
         List<RDFAtom> rdfAtoms = new ArrayList<>();
         try (RDFAtomParser parser = new RDFAtomParser(new FileReader(rdfFilePath), RDFFormat.NTRIPLES)) {
@@ -117,9 +104,7 @@ public class Verification {
         return rdfAtoms;
     }
 
-    /**
-     * Parse un fichier de requêtes SPARQL en étoile.
-     */
+
     static List<StarQuery> parseSparQLQueries(String queryFilePath) throws IOException {
         List<StarQuery> starQueries = new ArrayList<>();
         try (StarQuerySparQLParser parser = new StarQuerySparQLParser(queryFilePath)) {

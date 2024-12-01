@@ -23,17 +23,12 @@ public class RDFHexaStore implements RDFStorage {
     private final RDFIndex index; // Index HexaStore pour stocker les triplets
     private long size = 0; // Nombre de triplets stockés
 
-    /**
-     * Constructeur initialisant le dictionnaire et l'index.
-     */
     public RDFHexaStore() {
         this.dictionary = new RDFDictionary(); // Initialise le dictionnaire RDF
         this.index = new RDFIndex(); // Initialise l'index RDF
     }
 
-    /**
-     * Ajoute un RDFAtom dans le store en l'encodant et le stockant dans les index.
-     */
+
     @Override
     public boolean add(RDFAtom atom) {
         // Encode les termes du triplet RDF (sujet, prédicat, objet)
@@ -48,17 +43,13 @@ public class RDFHexaStore implements RDFStorage {
         return true; // Retourne true après ajout
     }
 
-    /**
-     * Retourne le nombre total de triplets stockés dans l'HexaStore.
-     */
+
     @Override
     public long size() {
         return size; // Retourne la taille actuelle
     }
 
-    /**
-     * Recherche les correspondances pour un RDFAtom donné.
-     */
+ 
     @Override
     public Iterator<Substitution> match(RDFAtom atom) {
         // Récupère les termes du triplet
@@ -102,14 +93,7 @@ public class RDFHexaStore implements RDFStorage {
         return results.iterator(); // Retourne un itérateur sur les substitutions
     }
 
-    /**
-     * Lancer une exception pour indiquer que les requêtes en étoile ne sont pas encore implémentées.
-     */
-    
 
-    /**
-     * Lancer une exception pour indiquer que la récupération des atomes n'est pas implémentée.
-     */
     @Override
     public Collection<Atom> getAtoms() {
         // Liste pour stocker les atomes RDF décodés
@@ -149,7 +133,6 @@ public class RDFHexaStore implements RDFStorage {
             Iterator<Substitution> atomMatches = match(atom);
 
             if (combinedResults.isEmpty()) {
-                // Initialize combined results for the first RDFAtom
                 atomMatches.forEachRemaining(combinedResults::add);
                 continue;
             }
