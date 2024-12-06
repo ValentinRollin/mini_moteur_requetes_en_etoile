@@ -17,7 +17,7 @@ public class TestVerif {
 
             // Évaluer et comparer les résultats des requêtes
             System.out.println("Évaluation et comparaison des requêtes depuis data/sample_query.queryset:");
-            verification.evaluateAndCompareAll("data/STAR_ALL_workload.queryset");
+            verification.evaluateAndCompareAll("data/STAR_ALL_workload.queryset","data/results.txt");
 
             System.out.println("=== Vérification terminée ===");
         } catch (IOException e) {
